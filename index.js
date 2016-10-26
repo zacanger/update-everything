@@ -51,13 +51,18 @@ const termPrompt = (question) => {
 termPrompt(query).then((sure) => {
   if (sure) {
     gp().then((a) => {
-      // chunk a by procs
+      const chunked = chunk(a, procs)
+      chunked.map((c) => {
+
       // fork for each chunk
       // finish the below on each forked proc
-        c.forEach((i) => {
-          npm.load({ global: true }, (err, npm) => {
-            if (err) return console.warn('Error!', err)
-            npm.commands.install([i])
+      // fork is not like fork, so... i'm lost, here
+
+          e.forEach((i) => {
+            npm.load({ global: true }, (err, npm) => {
+              if (err) return console.warn('Error!', err)
+              npm.commands.install([i])
+            })
           })
         })
 
