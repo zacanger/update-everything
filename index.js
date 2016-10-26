@@ -2,10 +2,18 @@
 
 const npm = require('npm')
 const gp = require('global-packages')
+const { fork } = require('child_process')
+const { cpus } = require('os')
 const { argv, stdin, stdout } = process
 const { createInterface } = require('readline')
 const { log } = console
+const procs = cpus().length
 const yes = argv[2] === '-y'
+
+const chunk = (arr, n) => {
+  if (!arr.length || n) return []
+  return [ arr.slice(0, n) ].concat(chunk(arr.slice(n), n))
+}
 
 const query = `Update Everything:
   ------------------
@@ -43,12 +51,16 @@ const termPrompt = (question) => {
 termPrompt(query).then((sure) => {
   if (sure) {
     gp().then((a) => {
-      a.forEach((i) => {
-        npm.load({ global: true }, (err, npm) => {
-          if (err) return console.warn('Error!', err)
-          npm.commands.install([i])
+      // chunk a by procs
+      // fork for each chunk
+      // finish the below on each forked proc
+        c.forEach((i) => {
+          npm.load({ global: true }, (err, npm) => {
+            if (err) return console.warn('Error!', err)
+            npm.commands.install([i])
+          })
         })
-      })
+
     })
   } else {
     log('  Okay, see you next time!\n')
