@@ -1,7 +1,7 @@
 {
   "name": "update-everything",
   "description": "Update all global modules",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "Zac Anger",
     "email": "zac@zacanger.com",
@@ -27,6 +27,9 @@
     "npm",
     "update"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "global-packages": "^0.1.1",
+    "npm": "^3.10.9"
+  },
   "devDependencies": {}
 }
