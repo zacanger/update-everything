@@ -4,6 +4,8 @@ const npm = require('npm')
 const gp = require('global-packages')
 const { createInterface } = require('readline')
 const { log } = console
+const yes = process.argv[2] === '-y'
+
 const query = `
   This will update ALL your globally installed modules.
   This may take quite a while. And some stuff might break.
@@ -12,7 +14,8 @@ const query = `
 
 // adapted from create-react-app's prompt
 const termPrompt = (question, isYesDefault) => {
-  return new Promise(resolve => {
+  if (yes) return new Promise((resolve) => resolve(true))
+  return new Promise((resolve) => {
     const rlInterface = createInterface({
       input  : process.stdin
     , output : process.stdout
@@ -39,7 +42,6 @@ termPrompt(query).then((sure) => {
       a.forEach((i) => {
         npm.load({ global: true }, (err, npm) => {
           if (err) return console.warn('Error!', err)
-          console.log(`Installing ${i}`)
           npm.commands.install([i])
         })
       })
