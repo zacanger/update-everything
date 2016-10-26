@@ -2,33 +2,37 @@
 
 const npm = require('npm')
 const gp = require('global-packages')
+const { argv, stdin, stdout } = process
 const { createInterface } = require('readline')
 const { log } = console
-const yes = process.argv[2] === '-y'
+const yes = argv[2] === '-y'
 
-const query = `
+const query = `Update Everything:
+  ------------------
   This will update ALL your globally installed modules.
   This may take quite a while. And some stuff might break.
   Are you sure you want to do this?
 `
 
 // adapted from create-react-app's prompt
-const termPrompt = (question, isYesDefault) => {
+const termPrompt = (question) => {
   if (yes) return new Promise((resolve) => resolve(true))
   return new Promise((resolve) => {
     const rlInterface = createInterface({
-      input  : process.stdin
-    , output : process.stdout
+      input  : stdin
+    , output : stdout
     })
 
-    const hint = isYesDefault ? '[Y/n]' : '[y/N]'
-    const message = `${question} ${hint}\n`
+    const hint = '[y/N]'
+    const message = `
+  ${question}
+  ${hint}
+`
 
-    rlInterface.question(message, answer => {
+    rlInterface.question(message, (answer) => {
       rlInterface.close()
 
-      const useDefault = answer.trim().length === 0
-      if (useDefault) return resolve(isYesDefault)
+      if (answer.trim().length === 0) return resolve(false)
 
       const isYes = answer.match(/^(yes|y)$/i)
       return resolve(isYes)
@@ -47,6 +51,6 @@ termPrompt(query).then((sure) => {
       })
     })
   } else {
-    log('Okay, see you next time!')
+    log('  Okay, see you next time!\n')
   }
 })
