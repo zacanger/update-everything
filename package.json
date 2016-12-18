@@ -1,7 +1,7 @@
 {
   "name": "update-everything",
-  "description": "Update all global modules",
-  "version": "0.1.0",
+  "description": "Update all global modules.",
+  "version": "0.2.0",
   "author": {
     "name": "Zac Anger",
     "email": "zac@zacanger.com",
@@ -10,12 +10,9 @@
   "license": "WTFPL",
   "main": "index.js",
   "preferGlobal": true,
-  "bin": {
-    "updateeverything": "./index.js",
-    "update-everything": "./index.js"
-  },
+  "bin": "./index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node ."
   },
   "homepage": "https://github.com/zacanger/update-everything#readme",
   "repository": {
@@ -30,10 +27,7 @@
     "npm",
     "update"
   ],
-  "dependencies": {
-    "global-packages": "^0.1.1",
-    "npm": "^3.10.9"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "engines": {
     "node": ">=6.0.0"
