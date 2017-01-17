@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/* eslint-disable no-unused-vars */
-const { execFile, execFileSync } = require('child_process')
+
+const { spawn } = require('child_process')
 const { argv, stdin, stdout, platform } = process
 const { createInterface } = require('readline')
 const { error, log, warn } = console
@@ -35,24 +35,29 @@ const termPrompt = (question) => {
 }
 
 const maybeDoTheThing = () => {
+  let f
+  let c
   if (['linux', 'sunos', 'freebsd', 'darwin'].includes(platform)) {
-    // execFileSync('./if-unix.sh', { stdio: [0, 1, 2] })
-    execFile('./if-unix.sh', (err, stdout, stderr) => {
-      if (err) return error('Error!', err)
-      log('stdout:', stdout)
-      warn('stderr:', stderr)
-    })
-    /*
+    c = 'sh'
+    f = [ 'if-unix.sh' ]
   } else if (platform === 'win32') {
-    execFile('./if-win.cmd', (err, stdout, stderr) => {
-      if (err) return error('Error!', err)
-      log('stdout:', stdout)
-      warn('stderr:', stderr)
-    })
-    */
+    c = 'cmd.exe'
+    f = [ '/c', 'if-win.cmd' ]
   } else {
     return warn(`Sorry, not yet implemented for ${platform}!`)
   }
+
+  const s = spawn(c, f)
+
+  s.stdout.on('data', (d) => {
+    log(d.toString())
+  })
+  s.stderr.on('data', (d) => {
+    warn(d.toString())
+  })
+  s.on('close', (c) => {
+    log(c.toString())
+  })
 }
 
 termPrompt(query).then((sure) => {
