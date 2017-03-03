@@ -1,4 +1,8 @@
+:: todo: filter out npm-windows-upgrade, hidden directories, and first line where it echos the thing for some reason
 @echo off
-for /F %%p in ('npm root -g') do ls -1 %%p
-:: Not really sure where this is going.
-:: Need to capture the above as input to `npm i -g`
+set list="for /F ""skip^=1"" %%p in ('npm root -g') do dir /b /d %%p"
+FOR /F "skip=1" %%A IN (
+  ' %list% '
+) DO (
+  echo %%A
+)
