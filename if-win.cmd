@@ -6,3 +6,7 @@ FOR /F "skip=1" %%A IN (
 ) DO (
   echo %%A
 )
+
+:: try this maybe:
+set n="('npm root -g')"
+for /f %%p in ('dir /b /d %n%') do npm i -g %%p
