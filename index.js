@@ -5,10 +5,12 @@ const { argv, stdin, stdout, platform } = process
 const { createInterface } = require('readline')
 const { error, log, warn } = console
 const yes = argv[2] === '-y'
-const query = `Update Everything:
+const query = `
+  Update Everything:
   ------------------
   This will update ALL your globally installed modules.
   This may take quite a while. And some stuff might break.
+  (To update Node itself, 'npm i -g n && n latest'.)
   Are you sure you want to do this?
 `
 
@@ -34,17 +36,18 @@ const termPrompt = (question) => {
   })
 }
 
-const maybeDoTheThing = () => {
+const maybeDoTheThing = (p) => {
   let f
   let c
-  if (['linux', 'sunos', 'freebsd', 'darwin'].includes(platform)) {
+  const ps = [ 'linux', 'freebsd', 'sunos', 'darwin' ]
+  if (ps.includes(p)) {
     c = 'sh'
     f = [ 'if-unix.sh' ]
-  } else if (platform === 'win32') {
+  } else if (p === 'win32') {
     c = 'cmd.exe'
     f = [ '/c', 'if-win.cmd' ]
   } else {
-    return warn(`Sorry, not yet implemented for ${platform}!`)
+    return warn(`Sorry, not yet implemented for ${p}!`)
   }
 
   const s = spawn(c, f)
@@ -63,7 +66,7 @@ const maybeDoTheThing = () => {
 termPrompt(query).then((sure) => {
   if (sure) {
     try {
-      maybeDoTheThing()
+      maybeDoTheThing(platform)
     } catch (err) {
       error('Something went super wrong, sorry!', err)
     }
