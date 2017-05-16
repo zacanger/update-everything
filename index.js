@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 const { spawn } = require('child_process')
-const { argv, stdin, stdout, platform } = process
+const { argv, stdin, stdout, env } = process
+const { SHELL } = env
 const { createInterface } = require('readline')
 const { error, log, warn } = console
 const yes = argv[2] === '-y'
@@ -36,29 +37,32 @@ const termPrompt = (question) => {
   })
 }
 
-const maybeDoTheThing = (p) => {
+const maybeDoTheThing = (s) => {
   let f
   let c
-  const ps = [ 'linux', 'freebsd', 'sunos', 'darwin' ]
-  if (ps.includes(p)) {
-    c = 'sh'
+  if (s && s.endsWith('sh')) {
+    if (s.includes('\\')) {
+      const z = s.split('\\')
+      c = z[z.length - 1]
+    } else {
+      const z = s.split('/')
+      c = z[z.length - 1]
+    }
     f = [ 'if-unix.sh' ]
-  } else if (p === 'win32') {
+  } else {
     c = 'cmd.exe'
     f = [ '/c', 'if-win.cmd' ]
-  } else {
-    return warn(`Sorry, not yet implemented for ${p}!`)
   }
 
-  const s = spawn(c, f)
+  const sp = spawn(c, f)
 
-  s.stdout.on('data', (d) => {
+  sp.stdout.on('data', (d) => {
     log(d.toString())
   })
-  s.stderr.on('data', (d) => {
+  sp.stderr.on('data', (d) => {
     warn(d.toString())
   })
-  s.on('close', (c) => {
+  sp.on('close', (c) => {
     log(c.toString())
   })
 }
@@ -66,7 +70,7 @@ const maybeDoTheThing = (p) => {
 termPrompt(query).then((sure) => {
   if (sure) {
     try {
-      maybeDoTheThing(platform)
+      maybeDoTheThing(SHELL)
     } catch (err) {
       error('Something went super wrong, sorry!', err)
     }
