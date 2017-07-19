@@ -1,3 +1,8 @@
+## DEPRECATED
+
+This module is deprecated. Please start using `npx` and stop installing
+everything globally.
+
 Update all global modules.
 
 Installation: `npm i -g update-everything`

@@ -50,8 +50,10 @@ const maybeDoTheThing = (s) => {
     }
     f = [ 'if-unix.sh' ]
   } else {
-    c = 'cmd.exe'
-    f = [ '/c', 'if-win.cmd' ]
+    console.error('Sorry, this only works on UNIX-like machines!')
+    process.exit(0)
+    // c = 'cmd.exe'
+    // f = [ '/c', 'if-win.cmd' ]
   }
 
   const sp = spawn(c, f)

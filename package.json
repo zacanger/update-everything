@@ -1,6 +1,6 @@
 {
   "name": "update-everything",
-  "description": "Update all global modules.",
+  "description": "DEPRECATED. Update all global modules.",
   "version": "0.2.0",
   "author": {
     "name": "Zac Anger",
