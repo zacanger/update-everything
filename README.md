@@ -14,9 +14,6 @@ This may take quite a while. And some stuff might break.
 This will prompt you to be sure you want to do this.
 If you're sure you're sure, you can pass a `-y` flag to skip the prompt.
 
-Depends heavily on [global-packages](https://github.com/zeit/global-packages)
-and, of course, [npm](https://npmjs.com).
-
 Also check out [global-packages-cli](https://npmjs.com/package/global-packages-cli),
 to list your globally-installed packages in text or JSON.
 
